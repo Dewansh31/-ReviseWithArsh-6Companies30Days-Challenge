@@ -1,0 +1,19 @@
+class DataStream {
+public:
+typedef long long ll;
+public:
+    ll val, k, pre, ts;
+    DataStream(int value, int K) {
+        val=value, k=K;
+        pre=-1, ts=0;
+    }
+    
+    bool consec(int num) {
+        if(num!=val){
+            pre=ts;
+        }
+        bool ans=ts-pre>=k;
+        ++ts;
+        return ans;
+    }
+};
