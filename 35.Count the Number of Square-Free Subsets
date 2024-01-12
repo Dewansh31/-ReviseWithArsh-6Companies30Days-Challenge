@@ -1,0 +1,110 @@
+class Solution {
+public:
+    
+    long long ans = 0;
+    int mod = 1e9+7;
+    long long one;
+    
+    int modI(long a,int p){
+        long ans=1;
+        while(p>0)
+        {
+            if(p%2)
+                ans = (ans * a)%mod,p--;
+            a = (a*a)%mod,p/=2;
+        }
+        return ans%mod;
+    }
+    
+    void func(vector<int>& count,int i,vector<int>& nums,vector<int>& freq){
+        
+        if(i==31){
+            int n = count.size();
+            long long l = one;
+            if(n==0) l--;
+            
+            long long tt = 1;
+            for(auto i:count){
+                tt = (tt * nums[i])%mod;
+            }
+            
+            ans = (ans + l*tt)%mod;
+            return ;
+        }
+        
+        if(nums[i]==0){
+            func(count,i+1,nums,freq);
+        }else{
+            func(count,i+1,nums,freq);
+            
+            int f = 1;
+            
+            int tt = i;
+            for(int j=2;j*j<=tt;j++){
+                while(tt%j==0){
+                    if(freq[j]){
+                        f = 0;
+                        break;
+                    }
+                    tt = tt/j;
+                }
+            }
+            if(tt>1 and freq[tt]) f = 0; 
+            
+            if(f){
+                count.push_back(i);
+                tt = i;
+                for(int j=2;j*j<=tt;j++){
+                    while(tt%j==0){
+                        freq[j]++;
+                        tt = tt/j;
+                    }
+                }
+                if(tt>1) freq[tt]++; 
+                
+                func(count,i+1,nums,freq);
+                count.pop_back();
+                
+                tt = i;
+                for(int j=2;j*j<=tt;j++){
+                    while(tt%j==0){
+                        freq[j]--;
+                        tt = tt/j;
+                    }
+                }
+                if(tt>1) freq[tt]--;
+                
+            }
+        }
+        
+        
+    }
+    
+    int squareFreeSubsets(vector<int>& nums) {
+        vector<int> count(31,0);
+        
+        for(auto i:nums){
+            count[i]++;
+        }
+        
+        count[4] = 0;
+        count[8] = 0;
+        count[9] = 0;
+        count[12] = 0;
+        count[16] = 0;
+        count[18] = 0;
+        count[20] = 0;
+        count[24] = 0;
+        count[25] = 0;
+        count[27] = 0;
+        count[28] = 0;
+        
+        vector<int> t,freq(31,0);
+        
+        one = modI(2,count[1]);
+        
+        func(t,2,count,freq);
+        
+        return ans;
+    }
+};
