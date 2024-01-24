@@ -1,0 +1,30 @@
+class Solution {
+    
+    /*
+    cars on the left end moving to the left side wont ever contribute to the answer since they are not gonna
+    collide with anyone, the same way, cars on the right end and moving to the right side wont ever contribute 
+    to the answer.
+    Keep note that all the cars in between will contribute to the answer
+    any pattern forming an RL pair will contribute to 2 points whereas an RS or SR or LS or SL will contribute
+    1 point.
+    Hence the answer will be 2*rlPairs+(n-2*rlPairs-sNum)
+    here n is basically the new size after ignoring the left ends' left cars and vice versa for right.
+    */
+public:
+    int countCollisions(string &str) {
+        int n=str.size(), i=0;
+        while(i<n&&str[i]=='L') {i++;}
+        if(i==n) {return 0;}
+        int j=n-1;
+        while(str[j]=='R'&&j>i) {j--;}
+        if(i==j) {return 0;}
+        n=j-i+1;
+        int rlPairs=0, sNum=0;
+        for(int k=i; k<=j; k++) {
+            if(str[k]=='S') {sNum++;}
+            // else if(k+1<=j&&str[k]=='R'&&str[k+1]=='L') {rlPairs++;}
+        }
+        // return 2*rlPairs+n-2*rlPairs-sNum;
+        return n-sNum;
+    }
+};
